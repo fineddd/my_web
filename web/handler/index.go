@@ -127,8 +127,14 @@ func LoginHdl(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &cookie)
 	w.Write([]byte(`{"errorCode":0}`))
 }
-
-func AcntManageHdl(w http.ResponseWriter, r *http.Request) {
+func LogoutHdl(w http.ResponseWriter, r *http.Request) {
+	id := user.UserSessionMgr.GetValue(r, "id")
+	if id != nil {
+		user.UserSessionMgr.DelSession(id.(int))
+	}
+	w.Write([]byte(`{"errorCode":0}`))
+}
+func UserManageHdl(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		log.Println(err)
@@ -143,7 +149,7 @@ func AcntManageHdl(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 }
-func AcntListHdl(w http.ResponseWriter, r *http.Request) {
+func UserListHdl(w http.ResponseWriter, r *http.Request) {
 	right := user.UserSessionMgr.GetValue(r, "right")
 	if right == nil {
 		w.Write([]byte(`{"errorCode":2,"str":"please login"}`))
@@ -161,6 +167,83 @@ func AcntListHdl(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Write([]byte(`{"errorCode":0,"users":` + string(*j) + `}`))
 }
+func UserAddHdl(w http.ResponseWriter, r *http.Request) {
+	right := user.UserSessionMgr.GetValue(r, "right")
+	if right == nil {
+		w.Write([]byte(`{"errorCode":2,"str":"please login"}`))
+		return
+	}
+	if err := r.ParseForm(); err != nil {
+		w.Write([]byte(`{"errorCode":1,"str":"` + err.Error() + `"}`))
+		return
+	}
+	pfID, _ := strconv.Atoi(r.FormValue("pfid"))
+	name := r.FormValue("name")
+	password := r.FormValue("password")
+	userRight, _ := strconv.Atoi(r.FormValue("right"))
+
+	id, err := user.AddUser(pfID, name, password, userRight)
+	if err != nil {
+		w.Write([]byte(`{"errorCode":1,"str":"` + err.Error() + `"}`))
+		return
+	}
+
+	w.Write([]byte(`{"errorCode":0, "id":` + strconv.Itoa(id) + `}`))
+}
+
+func UserUpdateHdl(w http.ResponseWriter, r *http.Request) {
+	right := user.UserSessionMgr.GetValue(r, "right")
+	if right == nil {
+		w.Write([]byte(`{"errorCode":2,"str":"please login"}`))
+		return
+	}
+	if err := r.ParseForm(); err != nil {
+		w.Write([]byte(`{"errorCode":1,"str":"` + err.Error() + `"}`))
+		return
+	}
+	id, _ := strconv.Atoi(r.FormValue("id"))
+	name := r.FormValue("name")
+	userRight, _ := strconv.Atoi(r.FormValue("right"))
+	pfID, _ := strconv.Atoi(r.FormValue("pfid"))
+
+	var password *string = nil
+	if r.FormValue("changepassword") == "true" {
+		pwd := r.FormValue("password")
+		password = &pwd
+	}
+
+	err := user.UpdateUser(id, name, password, userRight, pfID)
+	if err != nil {
+		w.Write([]byte(`{"errorCode":1,"str":"` + err.Error() + `"}`))
+		return
+	}
+
+	w.Write([]byte(`{"errorCode":0}`))
+}
+
+func UserDelHdl(w http.ResponseWriter, r *http.Request) {
+	right := user.UserSessionMgr.GetValue(r, "right")
+	if right == nil {
+		w.Write([]byte(`{"errorCode":2,"str":"please login"}`))
+		return
+	}
+	if err := r.ParseForm(); err != nil {
+		w.Write([]byte(`{"errorCode":1,"str":"` + err.Error() + `"}`))
+		return
+	}
+
+	id, _ := strconv.Atoi(r.FormValue("id"))
+	pfID, _ := strconv.Atoi(r.FormValue("pfid"))
+
+	err := user.DelUser(id, pfID)
+
+	if err != nil {
+		w.Write([]byte(`{"errorCode":1,"str":"` + err.Error() + `"}`))
+		return
+	}
+	w.Write([]byte(`{"errorCode":0}`))
+}
+
 func RightListHdl(w http.ResponseWriter, r *http.Request) {
 	right := user.UserSessionMgr.GetValue(r, "right")
 	if right == nil {

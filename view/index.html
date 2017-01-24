@@ -69,12 +69,7 @@
             <ul class="dropdown-menu">
               <!-- Menu Footer-->
               <li class="user-footer">
-                <div class="pull-left">
-                  <a href="javascript:;" class="btn btn-default btn-flat" id="btn_profile">Profile</a>
-                </div>
-                <div class="pull-right">
-                  <a href="javascript:;" class="btn btn-default btn-flat" id="btn_logout">Sign out</a>
-                </div>
+                <a href="javascript:;" class="btn btn-default btn-flat" id="btn_logout">Sign out</a>
               </li>
             </ul>
           </li>
@@ -421,7 +416,21 @@
                   $("#main_content").html(data);
               });
       });
+      $("#btn_logout").click(function(e) {
+          e.preventDefault();
+          $.post("/logout",
+              {
 
+              },
+              function (data, status) {
+                  var ret = json_parse(data);
+                  if (ret.errorCode == 0) {
+                      window.location = "/";
+                  } else {
+                      alert(ret.str);
+                  }
+              });
+      });
       $("#id_dash_board_v2").click(function() {
           $("li[tag='dash_board']").removeClass("active")
           $(this).addClass("active")

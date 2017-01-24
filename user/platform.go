@@ -59,6 +59,13 @@ func GetPlatformName(id int) (string, error) {
 	return pf.Name, nil
 }
 
+func IsPlatformExist(id int) bool {
+	PlatformMgr.lock.Lock()
+	defer PlatformMgr.lock.Unlock()
+	_, ok := PlatformMgr.platforms[id]
+	return ok
+}
+
 func init() {
 	PlatformMgr.platforms = make(map[int]*Platform)
 	(PlatformMgr.platforms)[0] = &Platform{ID:0, Name:"Tencent"}

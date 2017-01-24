@@ -12,7 +12,7 @@ type LoadUserReq struct {
 }
 
 func (req *LoadUserReq) OnExecute(dq *mysql.DBQuery) bool {
-	if !dq.Prepare("select `id`,`name`,`password`,`right`,`address`,`lastlogintime`,`status`,`pfid` from `user`") {
+	if !dq.Prepare("select `id`,`name`,`password`,`right`,`lastlogintime`,`pfid` from `user`") {
 		req.ch <- errors.New("prepare failed")
 		return false
 	} else if !dq.Query() {
@@ -23,18 +23,16 @@ func (req *LoadUserReq) OnExecute(dq *mysql.DBQuery) bool {
 	var name string
 	var password string
 	var right int
-	var address string
 	var lastLoginTime int64
-	var status int
 	var pfID int
 	var rightName string
 	var platformName string
 
-	for dq.NextRecord(&id, &name, &password, &right, &address, &lastLoginTime, &status, &pfID) {
+	for dq.NextRecord(&id, &name, &password, &right, &lastLoginTime, &pfID) {
 		rightName, _= GetRightName(right)
 		platformName, _= GetPlatformName(pfID)
 		(*req.users)[id] = &User{ID: id, PfID: pfID, Name: name, Password: password,
-			Right: right, RightName:rightName, PfName:platformName, Address: address, Status: status, LastLoginTime: lastLoginTime}
+			Right: right, RightName:rightName, PfName:platformName, Status: 0, LastLoginTime: lastLoginTime}
 	}
 	req.ch <- nil
 	return false
@@ -49,18 +47,16 @@ type AddUserReq struct {
 	name          string
 	password      string
 	right         int
-	address       string
 	lastLoginTime int64
-	status        int
 	pfID          int
 	ch            chan error
 }
 
 func (req *AddUserReq) OnExecute(dq *mysql.DBQuery) bool {
-	if !dq.Prepare("insert into `user`(`name`,`password`,`right`,`address`,`lastlogintime`,`status`,`pfid`) values(?,?,?,?,?,?,?)") {
+	if !dq.Prepare("insert into `user`(`name`,`password`,`right`,`lastlogintime`,`pfid`) values(?,?,?,?,?)") {
 		req.ch <- errors.New("prepair failed")
 		return false
-	} else if !dq.Exec(req.name, req.password, req.right, req.address, req.lastLoginTime, req.status, req.pfID) {
+	} else if !dq.Exec(req.name, req.password, req.right, req.lastLoginTime, req.pfID) {
 		req.ch <- errors.New("exec failed")
 		return false
 	}
@@ -129,17 +125,15 @@ type UpdateUserReq struct {
 	name     string
 	password string
 	right    int
-	address  string
-	status   int
 	pfID     int
 	ch       chan error
 }
 
 func (req *UpdateUserReq) OnExecute(dq *mysql.DBQuery) bool {
-	if !dq.Prepare("update `user` set `name`=?,`password`=?,`right`=?,`address`=?,`status`=?,`pfid`=? where `id`=?") {
+	if !dq.Prepare("update `user` set `name`=?,`password`=?,`right`=?,`pfid`=? where `id`=?") {
 		req.ch <- errors.New("prepare failed")
 		return false
-	} else if !dq.Exec(req.name, req.password, req.right, req.address, req.status, req.pfID, req.id) {
+	} else if !dq.Exec(req.name, req.password, req.right, req.pfID, req.id) {
 		req.ch <- errors.New("exec failed")
 		return false
 	}
