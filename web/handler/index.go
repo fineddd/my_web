@@ -113,6 +113,8 @@ func LoginHdl(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &cookie)
 	cookie = http.Cookie{Name: "right", Value: strconv.Itoa(userInfo.Right), Path: "/"}
 	http.SetCookie(w, &cookie)
+	cookie = http.Cookie{Name: "right_name", Value: userInfo.RightName, Path: "/"}
+	http.SetCookie(w, &cookie)
 	cookie = http.Cookie{Name: "src", Value: userInfo.Address, Path: "/"}
 	http.SetCookie(w, &cookie)
 	//rightValue, _ := user.GetRightValue(userInfo.Right)
@@ -158,4 +160,56 @@ func AcntListHdl(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Write([]byte(`{"errorCode":0,"users":` + string(*j) + `}`))
+}
+func RightListHdl(w http.ResponseWriter, r *http.Request) {
+	right := user.UserSessionMgr.GetValue(r, "right")
+	if right == nil {
+		w.Write([]byte(`{"errorCode":2,"str":"please login"}`))
+		return
+	}
+	/*
+	rightVal, errVal := user.GetRightValue(right.(int))
+	if errVal != nil {
+		w.Write([]byte(`{"errorCode":1,"str":"` + errVal.Error() + `"}`))
+		return
+	}
+	if (rightVal & user.UserRightViewRight) == 0 {
+		w.Write([]byte(`{"errorCode":1,"str":"permission denied"}`))
+		return
+	}
+	*/
+	j, err := user.GetAllRight()
+
+	if err != nil {
+		log.Println(err)
+		w.Write([]byte(`{"errorCode":1,"str":"` + err.Error() + `"}`))
+		return
+	}
+	w.Write([]byte(`{"errorCode":0,"rights":` + string(*j) + `}`))
+}
+
+func PlatformListHdl(w http.ResponseWriter, r *http.Request) {
+	right := user.UserSessionMgr.GetValue(r, "right")
+	if right == nil {
+		w.Write([]byte(`{"errorCode":2,"str":"please login"}`))
+		return
+	}
+	/*
+	rightVal, errVal := user.GetRightValue(right.(int))
+	if errVal != nil {
+		w.Write([]byte(`{"errorCode":1,"str":"` + errVal.Error() + `"}`))
+		return
+	}
+	if (rightVal & user.UserRightViewRight) == 0 {
+		w.Write([]byte(`{"errorCode":1,"str":"permission denied"}`))
+		return
+	}
+	*/
+	j, err := user.GetAllPlatform()
+	if err != nil {
+		log.Println(err)
+		w.Write([]byte(`{"errorCode":1,"str":"` + err.Error() + `"}`))
+		return
+	}
+	w.Write([]byte(`{"errorCode":0,"platforms":` + string(*j) + `}`))
 }

@@ -27,8 +27,14 @@ func (req *LoadUserReq) OnExecute(dq *mysql.DBQuery) bool {
 	var lastLoginTime int64
 	var status int
 	var pfID int
+	var rightName string
+	var platformName string
+
 	for dq.NextRecord(&id, &name, &password, &right, &address, &lastLoginTime, &status, &pfID) {
-		(*req.users)[id] = &User{ID: id, PfID: pfID, Name: name, Password: password, Right: right, Address: address, Status: status, LastLoginTime: lastLoginTime}
+		rightName, _= GetRightName(right)
+		platformName, _= GetPlatformName(pfID)
+		(*req.users)[id] = &User{ID: id, PfID: pfID, Name: name, Password: password,
+			Right: right, RightName:rightName, PfName:platformName, Address: address, Status: status, LastLoginTime: lastLoginTime}
 	}
 	req.ch <- nil
 	return false

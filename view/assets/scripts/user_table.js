@@ -40,11 +40,8 @@ var UserTableEditable = function () {
                             if (ret.users[i].status == 0) {
                                 status = "online";
                             }
-                            var strRight = '管理员';
-                            if (ret.users[i].right == 0) {
-                                strRight = "超级管理员";
-                            }
-                            var aiNew = oTable.fnAddData([ret.users[i].id, ret.users[i].name, strRight, ret.users[i].pfname,
+
+                            var aiNew = oTable.fnAddData([ret.users[i].id, ret.users[i].name, ret.users[i].rightname, ret.users[i].pfname,
                                 lastLoginTime, status, '<a class="edit" href="">修改</a>', '<a class="delete" href="">删除</a>']);
                         }
                     } else {
@@ -73,8 +70,8 @@ var UserTableEditable = function () {
                 $('#in_pwd').val("");
                 $('#in_repwd').val("");
                 $('#user_info').modal('show');
-/*
-                $.post("/user/right",
+
+                $.post("/right/list",
                     {
                     },
                     function(data, status){
@@ -115,7 +112,7 @@ var UserTableEditable = function () {
                                 return;
                             }
                         }
-                    });*/
+                    });
             });
         }
     };

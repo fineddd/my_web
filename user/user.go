@@ -14,14 +14,6 @@ const (
 	UserStatusForbidden = 1
 )
 
-type RightType int
-
-const (
-	RIGHT_FULL_ADMINISTRATOR RightType = iota
-	RIGHT_NORMAL_ADMINISTRATOR
-	RIGHT_END
-)
-
 type User struct {
 	ID            int    `json:"id"`
 	PfID          int    `json:"pfid"`

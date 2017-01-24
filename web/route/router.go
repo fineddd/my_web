@@ -29,7 +29,8 @@ func DynamicRoute() {
 
 	http.HandleFunc("/account_manage", handler.AcntManageHdl)
 	http.HandleFunc("/user/list", handler.AcntListHdl)
-	http.HandleFunc("/user/right", handler.AcntListHdl)
+	http.HandleFunc("/right/list", handler.RightListHdl)
+	http.HandleFunc("/platform/list", handler.PlatformListHdl)
 	/*
 	http.HandleFunc("/login", handler.LoginHdl)
 	http.HandleFunc("/logout", handler.LogoutHdl)
