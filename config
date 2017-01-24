@@ -1,0 +1,15 @@
+{
+	"DbUser":"root",
+	"DbPassword":"123",
+	"DbHost":"0.0.0.0",
+	"DbPort":3306,
+	"DbName":"gm_server",
+	"Port":80,
+	"CenterServAddr":"",
+    "MDB": {
+        "Addr"     : "",
+        "DB"       : "", 
+        "User"     : "",
+        "Password" : ""
+    }
+}

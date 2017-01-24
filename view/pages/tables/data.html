@@ -1,0 +1,119 @@
+    <!-- Main content -->
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="box">
+            <div class="box-header">
+                <h3 class="box-title">Account Table</h3>
+                <button type="button" class="btn btn-success pull-right" id="add_account">New Account</button>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table id="user_table" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                  <th>Account Name</th>
+                  <th>Right</th>
+                  <th>Platform</th>
+                  <th>LastLoginTime</th>
+                  <th>Status</th>
+                    <th>Modify</th>
+                    <th>Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                </tfoot>
+              </table>
+
+                <div id="user_info" class="modal fade" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                                <h4 id="title_user_info" class="modal-title">用户管理</h4>
+                            </div>
+                            <div class="modal-body form-horizontal">
+                                <!-- BEGIN REGISTRATION FORM -->
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">平台:</label>
+                                    <div class="col-md-8">
+                                        <select id="platform_list" class="form-control">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">用户名:</label>
+                                    <div class="input-icon has-feedback col-md-8">
+                                        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                                        <input class="form-control placeholder-no-fix " type="text" placeholder="用户名" id="in_username"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">权限:</label>
+                                    <div class="col-md-8">
+                                        <select id="st_right" class="form-control">
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="in_status">
+                                    <label class="control-label col-md-2">状态:</label>
+                                    <div class="input-icon col-md-8">
+                                        <i class="icon-user"></i>
+                                        <input class="form-control placeholder-no-fix" type="text" placeholder="状态" />
+                                    </div>
+                                </div>
+                                <div class="form-group" id="form_ck_pwd">
+                                    <label>
+                                        <input type="checkbox" id="btn_ck_pwd"/>
+                                        修改密码
+                                    </label>
+                                </div>
+                                <div class="form-group" id="form_pwd">
+                                    <label class="control-label col-md-2">新的密码:</label>
+                                    <div class="input-icon has-feedback col-md-8">
+                                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                                        <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="新的密码" id="in_pwd"/>
+                                    </div>
+                                </div>
+                                <div class="form-group" id="form_repwd">
+                                    <label class="control-label col-md-2">重复密码:</label>
+                                    <div class="input-icon has-feedback col-md-8">
+                                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                                        <input class="form-control placeholder-no-fix" type="password" autocomplete="off" placeholder="重复密码" id="in_repwd"/>
+                                    </div>
+                                </div>
+                                <!-- END REGISTRATION FORM -->
+                            </div>
+                            <div class="modal-footer">
+                                <button id="btn_cancel" type="button" data-dismiss="modal" class="btn default">取消</button>
+                                <button id="btn_commit" type="button" data-dismiss="modal" class="btn btn-success">确定</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    <!-- /.content -->
+
+<!-- ./wrapper -->
+    <!--script src="assets/plugins/data-tables/jquery.dataTables.js"></script-->
+    <!--script src="assets/plugins/data-tables/DT_bootstrap.js"></script-->
+    <script src="plugins/datatables/jquery.dataTables.js"></script>
+    <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="assets/scripts/user_table.js"></script>
+ <!-- page script -->
+<script>
+    jQuery(document).ready(function() {
+        UserTableEditable.init();
+    });
+</script>
+
